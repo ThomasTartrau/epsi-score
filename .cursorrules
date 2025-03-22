@@ -1,0 +1,98 @@
+Before diving into the best practices, please note that you may need to adapt the globs depending on your specific project structure.
+
+---
+name: nextjs-best-practices.mdc
+description: Best practices for Next.js 15 applications and routing
+globs: **/*.{ts,tsx}
+---
+
+- Utilize the new `use client` directive for client components
+- Implement server actions for improved performance and security
+- Use the new `loading.ts` and `error.ts` for better user experience
+- Leverage partial prerendering for faster initial load times
+- Clearly separate client and server components using appropriate directories
+- Organize files into `_components`, `_types`, and `_actions` folders for better separation of concerns
+
+---
+name: shadcn-best-practices.mdc
+description: Guidelines for using Shadcn UI components
+globs: **/*.{ts,tsx}
+---
+
+- Use the `cn` utility for conditional class names
+- Customize components using the `asChild` prop for better accessibility
+- Follow the recommended folder structure for component organization
+- Utilize the provided hooks like `useToast` for consistent UI behavior
+- Place custom Shadcn components in `_components` folders for better organization
+
+---
+name: tailwind-best-practices.mdc
+description: Best practices for styling with Tailwind CSS
+globs: **/*.{ts,tsx,css}
+---
+
+- Use utility-first approach for consistent and maintainable styles
+- Implement responsive design using Tailwind's breakpoints
+- Utilize the `@apply` directive for component-specific styles
+- Keep your `tailwind.config.js` organized and modular
+- Store custom Tailwind components in `_components` folders
+
+---
+name: postgresql-best-practices.mdc
+description: Guidelines for working with PostgreSQL databases
+globs: **/*.sql
+---
+
+- Use appropriate indexing for frequently queried columns
+- Implement proper transaction management for data integrity
+- Utilize prepared statements to prevent SQL injection
+- Regularly optimize and vacuum your database for performance
+- Keep database-related types in `_types` folders for better organization
+
+---
+name: prisma-orm-best-practices.mdc
+description: Best practices for using Prisma ORM with PostgreSQL
+globs: **/*.{ts,prisma}
+---
+
+- Use Prisma Client extensions for custom functionality
+- Implement proper error handling with Prisma's error types
+- Utilize Prisma's relation fields for efficient data fetching
+- Keep your `schema.prisma` file up-to-date with your database schema
+- Store Prisma-related actions in `_actions` folders for better separation
+
+---
+name: better-auth-best-practices.mdc
+description: Guidelines for implementing authentication with Better Auth
+globs: **/*.{ts,tsx}
+---
+
+- Use the provided hooks like `useAuth` for consistent auth state management
+- Implement proper session management using Better Auth's session API
+- Utilize the built-in password hashing for secure user authentication
+- Follow the recommended patterns for handling authentication errors
+- Keep authentication-related components in `_components` folders
+
+---
+name: resend-best-practices.mdc
+description: Best practices for sending emails with Resend
+globs: **/*.{ts,tsx}
+---
+
+- Use the Resend client for sending transactional emails
+- Implement proper error handling for email sending failures
+- Utilize Resend's email templates for consistent branding
+- Follow Resend's rate limiting guidelines to avoid service disruptions
+- Store email-related actions in `_actions` folders for better organization
+
+---
+name: react-email-best-practices.mdc
+description: Guidelines for creating emails with React Email
+globs: **/*.{ts,tsx}
+---
+
+- Use React Email components for responsive and accessible email layouts
+- Implement proper email testing using React Email's preview feature
+- Utilize the provided hooks like `useTheme` for consistent email styling
+- Follow best practices for email development, such as using inline styles
+- Keep email-related components in `_components` folders for better organization
