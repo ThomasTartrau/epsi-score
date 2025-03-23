@@ -5,40 +5,31 @@ import { AUTHENTICATED_URL } from "@/lib/constants";
 import { ErrorContext } from "better-auth/client";
 import { z } from "zod";
 
-export const openSignUpPage = (
-  callbackUrl: string | null,
-  router: RouterType,
-) => {
-  const encodedCallbackUrl = encodeURIComponent(callbackUrl ?? "");
-
-  if (!callbackUrl) {
-    router.push("/auth/register");
-  } else {
-    router.push(`/auth/register?callbackUrl=${encodedCallbackUrl}`);
-  }
-};
-
-export const signInWithCredentials = async (
+export const signInWithMagicLink = async (
   values: z.infer<typeof signInSchema>,
   callbackUrl: string | null,
   router: RouterType,
 ) => {
-  await signIn.email(
+  await signIn.magicLink(
     {
       email: values.email,
-      password: values.password,
+      callbackURL: callbackUrl ?? AUTHENTICATED_URL,
     },
     {
       onRequest: () => {
-        toast.loading("Connexion en cours...", { id: "signInToast" });
+        toast.loading("Envoi du lien de connexion...", { id: "signInToast" });
       },
       onSuccess: async () => {
-        toast.success("Connecté avec succès", { id: "signInToast" });
-        router.push(callbackUrl ?? AUTHENTICATED_URL);
-        router.refresh();
+        toast.success(
+          "Un lien de connexion a été envoyé à votre email. Veuillez vérifier votre boite mail.",
+          {
+            id: "signInToast",
+          },
+        );
+        router.push("/auth/magic-link");
       },
       onError: async (context: ErrorContext) => {
-        toast.error(context.error.message ?? "Quelque chose a mal tourné.", {
+        toast.error(context.error.message ?? "Quelque chose s'est mal passé.", {
           id: "signInToast",
         });
       },

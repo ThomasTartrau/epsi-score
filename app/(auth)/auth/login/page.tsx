@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import { Spinner } from "@/components/custom/spinner";
 import Logo from "@/components/custom/logo";
-import { LoginForm } from "./_components/login-form";
+import { LoginForm } from "./_components/login.form";
 
 export const metadata: Metadata = {
   title: "Connexion",

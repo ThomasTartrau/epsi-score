@@ -1,12 +1,6 @@
-import { AppSidebar } from "@/components/custom/sidebar/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { auth } from "@/lib/auth/server";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { Footer } from "@/components/custom/footer";
+import Logo from "@/components/custom/logo";
+import { Github, LinkedinIcon } from "lucide-react";
 import React from "react";
 
 export default async function DashboardLayout({
@@ -14,24 +8,31 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) {
-    throw redirect("/auth/login");
-  }
-
   return (
-    <SidebarProvider>
-      <AppSidebar initialSession={session} />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-          </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+    <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+      <div className="w-full max-w-sm">{children}</div>
+      <div className="w-full">
+        <Footer
+          logo={<Logo size="sm" />}
+          brandName="OpenInnovation EPSI Nantes"
+          socialLinks={[
+            {
+              icon: <LinkedinIcon className="h-5 w-5" />,
+              href: "https://fr.linkedin.com/in/thomas-tartrau",
+              label: "Linkedin",
+            },
+            {
+              icon: <Github className="h-5 w-5" />,
+              href: "https://github.com/ThomasTartrau",
+              label: "GitHub",
+            },
+          ]}
+          copyright={{
+            text: "© 2025 Thomas Tartrau - EPSI Nantes",
+            license: "Tous droits réservés",
+          }}
+        />
+      </div>
+    </div>
   );
 }

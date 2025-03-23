@@ -25,6 +25,7 @@ model User {
   sessions         Session[]
   accounts         Account[]
   twofactors       TwoFactor[]
+  scores           Score[]
 
   @@unique([email])
   @@map("user")
@@ -76,11 +77,34 @@ model Verification {
 }
 
 model TwoFactor {
-  id          String @id
+  id          String @id 
   secret      String
   backupCodes String
   userId      String
   user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("twoFactor")
+}
+
+model Team {
+  id          Int @id @default(autoincrement())
+  name        String
+  createdAt   DateTime @default(now())
+  scores      Score[]
+}
+
+model Score {
+  id        Int @id @default(autoincrement())
+  score_1   Int
+  score_2   Int
+  score_3   Int
+  score_4   Int
+  score_5   Int
+  createdAt DateTime @default(now())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId    Int
+  team      Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId]) // Un utilisateur ne peut pas donner plusieurs scores à un même équipe
 }
