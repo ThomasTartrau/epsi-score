@@ -158,7 +158,7 @@ export function TeamList({
                         >
                           <Avatar className="h-9 w-9 border-2 border-sky-100">
                             <AvatarImage
-                              src={`/storage/team/${teamName}.png`}
+                              src={`/team/${teamName}.png`}
                               alt={teamName}
                               loading="eager"
                             />

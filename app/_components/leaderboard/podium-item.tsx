@@ -124,7 +124,7 @@ export function PodiumItem({
               )}
             >
               <AvatarImage
-                src={`/storage/team/${teamName}.png`}
+                src={`/team/${teamName}.png`}
                 alt={shortName}
                 loading="eager"
               />
