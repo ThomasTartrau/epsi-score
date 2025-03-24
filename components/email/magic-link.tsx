@@ -37,7 +37,7 @@ const baseStyles = {
     fontSize: "24px",
     fontWeight: "bold",
     marginTop: "32px",
-    color: "#7C3AED",
+    color: "#3aa5ed",
   },
   paragraph: {
     fontSize: "16px",
@@ -50,7 +50,7 @@ const baseStyles = {
     margin: "32px 0",
   },
   button: {
-    backgroundColor: "#7C3AED",
+    backgroundColor: "#3aa5ed",
     borderRadius: "0.5rem",
     color: "#ffffff",
     padding: "12px 24px",
@@ -66,7 +66,7 @@ const baseStyles = {
     textAlign: "center" as const,
   },
   link: {
-    color: "#7C3AED",
+    color: "#3aa5ed",
     textDecoration: "underline",
     fontSize: "14px",
     wordBreak: "break-all" as const,
