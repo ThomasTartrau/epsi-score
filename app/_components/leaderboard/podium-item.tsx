@@ -24,11 +24,11 @@ const podiumHeights = {
 };
 
 const podiumColors = {
-  1: "bg-green-600",
-  2: "bg-green-500",
-  3: "bg-green-400",
-  4: "bg-green-300",
-  5: "bg-green-200",
+  1: "bg-sky-600",
+  2: "bg-sky-500",
+  3: "bg-sky-400",
+  4: "bg-sky-300",
+  5: "bg-sky-200",
 };
 
 export function PodiumItem({
@@ -119,16 +119,16 @@ export function PodiumItem({
                   : position === 2
                     ? "border-gray-300"
                     : position === 3
-                      ? "border-amber-600"
-                      : "border-green-200",
+                      ? "border-sky-600"
+                      : "border-sky-200",
               )}
             >
               <AvatarImage
-                src={`/team/${teamName}.png`}
+                src={`/storage/team/${teamName}.png`}
                 alt={shortName}
                 loading="eager"
               />
-              <AvatarFallback className="bg-green-100 text-lg font-bold text-green-800">
+              <AvatarFallback className="bg-sky-100 text-lg font-bold text-sky-800">
                 {shortName.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -180,7 +180,7 @@ export function PodiumItem({
                     damping: 15,
                   }}
                 >
-                  <Badge className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 p-0 text-white">
+                  <Badge className="flex h-6 w-6 items-center justify-center rounded-full bg-sky-500 p-0 text-white">
                     <StarIcon size={12} />
                   </Badge>
                 </motion.div>
@@ -198,8 +198,8 @@ export function PodiumItem({
               : position === 2
                 ? "bg-gray-300 text-gray-700"
                 : position === 3
-                  ? "bg-amber-600 text-amber-50"
-                  : "bg-green-200 text-green-800",
+                  ? "bg-sky-600 text-sky-50"
+                  : "bg-sky-200 text-sky-800",
           )}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -240,7 +240,7 @@ export function PodiumItem({
           transition={{ delay: 0.2 }}
         >
           <motion.p
-            className="text-lg font-bold text-green-700 dark:text-green-300"
+            className="text-lg font-bold text-sky-700 dark:text-sky-300"
             animate={
               hasPositionChanged
                 ? {
@@ -252,7 +252,7 @@ export function PodiumItem({
           >
             {team.score.toLocaleString()}
           </motion.p>
-          <p className="line-clamp-1 max-w-[90px] text-center text-xs font-medium text-green-600 dark:text-green-400">
+          <p className="line-clamp-1 max-w-[90px] text-center text-xs font-medium text-sky-600 dark:text-sky-400">
             {shortName}
           </p>
         </motion.div>

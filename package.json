@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma migrate deploy && prisma generate && next build",
+    "build:simple": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
     "check": "prettier --check \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-    "ci": "npm run check && npm run lint"
+    "ci": "npm run check && npm run lint",
+    "ci:full": "npm run format && npm run check && npm run lint && npm run build"
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.17",

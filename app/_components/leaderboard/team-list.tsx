@@ -32,22 +32,22 @@ export function TeamList({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.7 }}
     >
-      <h3 className="mb-6 text-center font-semibold text-green-700 dark:text-green-300">
+      <h3 className="mb-6 text-center font-semibold text-sky-700 dark:text-sky-300">
         Autres équipes
       </h3>
 
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-green-50 dark:bg-green-900/20">
-              <th className="w-16 py-3 text-center font-semibold text-green-700 dark:text-green-300">
+            <tr className="bg-sky-50 dark:bg-sky-900/20">
+              <th className="w-16 py-3 text-center font-semibold text-sky-700 dark:text-sky-300">
                 Pos.
               </th>
               <th className="w-16 py-3"></th>
-              <th className="py-3 text-left font-semibold text-green-700 dark:text-green-300">
+              <th className="py-3 text-left font-semibold text-sky-700 dark:text-sky-300">
                 Équipe
               </th>
-              <th className="py-3 text-right font-semibold text-green-700 dark:text-green-300">
+              <th className="py-3 text-right font-semibold text-sky-700 dark:text-sky-300">
                 Score
               </th>
             </tr>
@@ -111,16 +111,16 @@ export function TeamList({
                       },
                     }}
                     className={cn(
-                      "border-b border-green-100 hover:bg-green-50/50 dark:border-green-900/30 dark:hover:bg-green-900/10",
+                      "border-b border-sky-100 hover:bg-sky-50/50 dark:border-sky-900/30 dark:hover:bg-sky-900/10",
                       index % 2 === 0
                         ? "bg-white dark:bg-transparent"
-                        : "bg-green-50/30 dark:bg-green-900/5",
+                        : "bg-sky-50/30 dark:bg-sky-900/5",
                     )}
                   >
                     <td className="py-3 text-center">
                       <div className="flex items-center justify-center">
                         <motion.div
-                          className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-green-200 text-sm font-semibold text-green-800 dark:bg-green-700 dark:text-green-100"
+                          className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-sky-200 text-sm font-semibold text-sky-800 dark:bg-sky-700 dark:text-sky-100"
                           animate={
                             positionChanged
                               ? {
@@ -158,13 +158,13 @@ export function TeamList({
                               : {}
                           }
                         >
-                          <Avatar className="h-9 w-9 border-2 border-green-100 dark:border-green-700">
+                          <Avatar className="h-9 w-9 border-2 border-sky-100 dark:border-sky-700">
                             <AvatarImage
-                              src={`/team/${teamName}.png`}
+                              src={`/storage/team/${teamName}.png`}
                               alt={teamName}
                               loading="eager"
                             />
-                            <AvatarFallback className="bg-green-100 font-medium text-green-800">
+                            <AvatarFallback className="bg-sky-100 font-medium text-sky-800">
                               {shortName.substring(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
@@ -191,7 +191,7 @@ export function TeamList({
                                 className={cn(
                                   "flex h-4 w-4 items-center justify-center rounded-full text-white",
                                   positionDirection === "up"
-                                    ? "bg-green-500"
+                                    ? "bg-sky-500"
                                     : "bg-rose-500",
                                 )}
                               >
@@ -219,7 +219,7 @@ export function TeamList({
                                 damping: 15,
                               }}
                             >
-                              <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white">
+                              <div className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-500 text-white">
                                 <StarIcon size={10} />
                               </div>
                             </motion.div>
@@ -230,7 +230,7 @@ export function TeamList({
 
                     <td className="py-3">
                       <motion.span
-                        className="font-medium text-green-900 dark:text-green-100"
+                        className="font-medium text-sky-900 dark:text-sky-100"
                         animate={
                           positionChanged
                             ? {
@@ -250,7 +250,7 @@ export function TeamList({
 
                     <td className="py-3 pr-4 text-right">
                       <motion.span
-                        className="font-bold text-green-700 dark:text-green-300"
+                        className="font-bold text-sky-700 dark:text-sky-300"
                         animate={
                           positionChanged
                             ? {

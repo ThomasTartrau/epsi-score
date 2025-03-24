@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import useSWR from "swr";
 import { Podium } from "./podium";
 import { TeamList } from "./team-list";
@@ -114,15 +113,6 @@ export default function ClientLeaderboard() {
           isNewTeam={isNewTeam}
         />
       )}
-
-      <motion.div
-        className="mt-8 text-center text-xs text-green-600 opacity-70 dark:text-green-400"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 1.2 }}
-      >
-        Dernière mise à jour : {new Date().toLocaleTimeString()}
-      </motion.div>
     </div>
   );
 }
