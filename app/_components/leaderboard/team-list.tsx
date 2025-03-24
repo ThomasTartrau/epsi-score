@@ -32,22 +32,22 @@ export function TeamList({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.7 }}
     >
-      <h3 className="mb-6 text-center font-semibold text-sky-700 dark:text-sky-300">
+      <h3 className="mb-6 text-center font-semibold text-sky-700">
         Autres équipes
       </h3>
 
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-sky-50 dark:bg-sky-900/20">
-              <th className="w-16 py-3 text-center font-semibold text-sky-700 dark:text-sky-300">
+            <tr className="bg-sky-50">
+              <th className="w-16 py-3 text-center font-semibold text-sky-700">
                 Pos.
               </th>
               <th className="w-16 py-3"></th>
-              <th className="py-3 text-left font-semibold text-sky-700 dark:text-sky-300">
+              <th className="py-3 text-left font-semibold text-sky-700">
                 Équipe
               </th>
-              <th className="py-3 text-right font-semibold text-sky-700 dark:text-sky-300">
+              <th className="py-3 text-right font-semibold text-sky-700">
                 Score
               </th>
             </tr>
@@ -111,16 +111,14 @@ export function TeamList({
                       },
                     }}
                     className={cn(
-                      "border-b border-sky-100 hover:bg-sky-50/50 dark:border-sky-900/30 dark:hover:bg-sky-900/10",
-                      index % 2 === 0
-                        ? "bg-white dark:bg-transparent"
-                        : "bg-sky-50/30 dark:bg-sky-900/5",
+                      "border-b border-sky-100 hover:bg-sky-50/50",
+                      index % 2 === 0 ? "bg-white" : "bg-sky-50/30",
                     )}
                   >
                     <td className="py-3 text-center">
                       <div className="flex items-center justify-center">
                         <motion.div
-                          className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-sky-200 text-sm font-semibold text-sky-800 dark:bg-sky-700 dark:text-sky-100"
+                          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-sky-200 text-sm font-semibold text-sky-800"
                           animate={
                             positionChanged
                               ? {
@@ -130,7 +128,7 @@ export function TeamList({
                               : {}
                           }
                         >
-                          {position}
+                          {position}e
                         </motion.div>
                       </div>
                     </td>
@@ -158,7 +156,7 @@ export function TeamList({
                               : {}
                           }
                         >
-                          <Avatar className="h-9 w-9 border-2 border-sky-100 dark:border-sky-700">
+                          <Avatar className="h-9 w-9 border-2 border-sky-100">
                             <AvatarImage
                               src={`/storage/team/${teamName}.png`}
                               alt={teamName}
@@ -230,7 +228,7 @@ export function TeamList({
 
                     <td className="py-3">
                       <motion.span
-                        className="font-medium text-sky-900 dark:text-sky-100"
+                        className="font-medium text-sky-900"
                         animate={
                           positionChanged
                             ? {
@@ -250,7 +248,7 @@ export function TeamList({
 
                     <td className="py-3 pr-4 text-right">
                       <motion.span
-                        className="font-bold text-sky-700 dark:text-sky-300"
+                        className="font-bold text-sky-700"
                         animate={
                           positionChanged
                             ? {
@@ -260,7 +258,7 @@ export function TeamList({
                             : {}
                         }
                       >
-                        {team.score.toLocaleString()}
+                        {team.score.toLocaleString()} pts
                       </motion.span>
                     </td>
                   </motion.tr>

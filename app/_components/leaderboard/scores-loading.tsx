@@ -55,7 +55,7 @@ export function ScoresLoading() {
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-sky-50 dark:bg-sky-900/20">
+              <tr className="bg-blue-50">
                 <th className="w-16 py-3 text-center">
                   <Skeleton className="mx-auto h-5 w-10" />
                 </th>
@@ -72,11 +72,7 @@ export function ScoresLoading() {
               {Array.from({ length: 6 }).map((_, index) => (
                 <tr
                   key={`loading-team-${index}`}
-                  className={
-                    index % 2 === 0
-                      ? "bg-white dark:bg-transparent"
-                      : "bg-sky-50/30 dark:bg-sky-900/5"
-                  }
+                  className={index % 2 === 0 ? "bg-white" : "bg-blue-50/30"}
                 >
                   <td className="py-3 text-center">
                     <div className="flex items-center justify-center">

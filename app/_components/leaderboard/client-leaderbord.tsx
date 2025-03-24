@@ -93,7 +93,7 @@ export default function ClientLeaderboard() {
 
   if (error || !data) {
     return (
-      <div className="mt-8 text-center text-gray-500 dark:text-gray-400">
+      <div className="mt-8 text-center text-gray-500">
         <p>Impossible de charger les scores</p>
       </div>
     );

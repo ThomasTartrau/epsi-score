@@ -5,7 +5,7 @@ import ClientLeaderboard from "./_components/leaderboard/client-leaderbord";
 
 export default function Home() {
   return (
-    <div className="from-background via-background to-background dark:from-background dark:via-background dark:to-background flex min-h-screen w-full flex-col items-center bg-gradient-to-b p-4 sm:p-8 md:p-16">
+    <div className="from-background via-background to-background flex min-h-screen w-full flex-col items-center bg-gradient-to-b p-4 sm:p-8 md:p-16">
       <div className="relative container max-w-5xl">
         <header className="mb-12 flex w-full flex-col items-center">
           <div className="mb-6 flex flex-col items-center gap-3 md:flex-row">
@@ -16,7 +16,7 @@ export default function Home() {
           </div>
 
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row">
-            <p className="text-center text-lg font-medium text-sky-700 dark:text-sky-300">
+            <p className="text-center text-lg font-medium text-sky-700">
               Saison 1
             </p>
           </div>
@@ -24,7 +24,7 @@ export default function Home() {
           <div className="h-1 w-full max-w-md rounded-full bg-gradient-to-r from-transparent via-sky-500/60 to-transparent" />
         </header>
 
-        <main className="flex w-full flex-col items-center">
+        <main>
           <Suspense fallback={<ScoresLoading />}>
             <ClientLeaderboard />
           </Suspense>

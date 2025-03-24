@@ -65,9 +65,7 @@ export function StarRating({
             <motion.div
               className={cn(
                 "transition-colors duration-300",
-                (hover || rating) >= star
-                  ? "text-yellow-400 dark:text-yellow-300"
-                  : "text-muted",
+                (hover || rating) >= star ? "text-yellow-400" : "text-muted",
               )}
               initial={{ scale: 1 }}
               animate={{

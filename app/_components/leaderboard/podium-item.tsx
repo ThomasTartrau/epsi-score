@@ -239,20 +239,21 @@ export function PodiumItem({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <motion.p
-            className="text-lg font-bold text-sky-700 dark:text-sky-300"
-            animate={
-              hasPositionChanged
-                ? {
-                    scale: [1, 1.1, 1],
-                    transition: { duration: 0.4 },
-                  }
-                : {}
-            }
-          >
-            {team.score.toLocaleString()}
-          </motion.p>
-          <p className="line-clamp-1 max-w-[90px] text-center text-xs font-medium text-sky-600 dark:text-sky-400">
+          <Badge className="text-lg font-bold text-sky-700" variant="outline">
+            <motion.span
+              animate={
+                hasPositionChanged
+                  ? {
+                      scale: [1, 1.1, 1],
+                      transition: { duration: 0.4 },
+                    }
+                  : {}
+              }
+            >
+              {team.score.toLocaleString()} pts
+            </motion.span>
+          </Badge>
+          <p className="line-clamp-1 max-w-[90px] text-center text-xs font-medium text-sky-600">
             {shortName}
           </p>
         </motion.div>

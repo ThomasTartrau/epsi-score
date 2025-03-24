@@ -31,7 +31,7 @@ export function Podium({ data, findPreviousPosition, isNewTeam }: PodiumProps) {
 
   return (
     <motion.div
-      className="w-full pb-10"
+      className="flex w-full flex-col items-center pb-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
