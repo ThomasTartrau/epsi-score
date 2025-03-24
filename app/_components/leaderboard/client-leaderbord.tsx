@@ -9,7 +9,6 @@ import { ScoresLoading } from "./scores-loading";
 import { ScoresResultInterface } from "@/app/_types/scores.type";
 import { getScores } from "@/app/_actions/scores.actions";
 
-// Custom fetcher for SWR that uses our server action
 const fetcher = async () => {
   try {
     return await getScores();
@@ -20,31 +19,27 @@ const fetcher = async () => {
 };
 
 export default function ClientLeaderboard() {
-  // Use SWR for data fetching with automatic revalidation
   const { data, error, isLoading } = useSWR<ScoresResultInterface>(
     "scores-data",
     fetcher,
     {
-      refreshInterval: 3000, // Refresh every 3 seconds
+      refreshInterval: 3000,
       revalidateOnFocus: true,
       suspense: false,
-      dedupingInterval: 1000, // Dedupe calls within 1 second
-      errorRetryInterval: 5000, // Wait 5 seconds before retrying after error
+      dedupingInterval: 1000,
+      errorRetryInterval: 5000,
     },
   );
 
   const [previousScores, setPreviousScores] =
     useState<ScoresResultInterface | null>(null);
 
-  // Update previous scores when data changes
   useEffect(() => {
     if (data && !isLoading) {
       setPreviousScores((prevScores) => {
-        // Only update previous scores if we already have data
         if (prevScores) {
           return { scores: [...prevScores.scores] };
         }
-        // First load, initialize previous scores
         return { scores: [...data.scores] };
       });
     }

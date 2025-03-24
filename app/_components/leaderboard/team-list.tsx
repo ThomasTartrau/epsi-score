@@ -17,7 +17,6 @@ export function TeamList({
   findPreviousPosition,
   isNewTeam,
 }: TeamListProps) {
-  // Nous prenons seulement les équipes classées après la 5ème position
   const otherTeams = data.scores.slice(5);
 
   if (otherTeams.length === 0) {
@@ -53,7 +52,7 @@ export function TeamList({
           </thead>
           <tbody>
             {otherTeams.map((team, index) => {
-              const position = index + 6; // Position commence à 6
+              const position = index + 6;
               const teamName = team.teamName || `Équipe ${position}`;
               const shortName =
                 teamName.length > 25
@@ -87,7 +86,6 @@ export function TeamList({
                       : "bg-green-50/30 dark:bg-green-900/5",
                   )}
                 >
-                  {/* Position */}
                   <td className="py-3 text-center">
                     <div className="flex items-center justify-center">
                       <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-green-200 text-sm font-semibold text-green-800 dark:bg-green-700 dark:text-green-100">
@@ -96,7 +94,6 @@ export function TeamList({
                     </div>
                   </td>
 
-                  {/* Avatar avec indicateurs de changement */}
                   <td className="py-3">
                     <div className="relative flex items-center justify-center">
                       <Avatar className="h-9 w-9 border-2 border-green-100 dark:border-green-700">
@@ -109,7 +106,6 @@ export function TeamList({
                         </AvatarFallback>
                       </Avatar>
 
-                      {/* Position change indicator */}
                       {positionChanged && !isNew && (
                         <motion.div
                           className="absolute -top-1 -right-1"
@@ -134,7 +130,6 @@ export function TeamList({
                         </motion.div>
                       )}
 
-                      {/* New team indicator */}
                       {isNew && (
                         <motion.div
                           className="absolute -top-1 -right-1"
@@ -150,14 +145,12 @@ export function TeamList({
                     </div>
                   </td>
 
-                  {/* Nom de l'équipe */}
                   <td className="py-3">
                     <span className="font-medium text-green-900 dark:text-green-100">
                       {shortName}
                     </span>
                   </td>
 
-                  {/* Score */}
                   <td className="py-3 pr-4 text-right">
                     <span className="font-bold text-green-700 dark:text-green-300">
                       {team.score.toLocaleString()}

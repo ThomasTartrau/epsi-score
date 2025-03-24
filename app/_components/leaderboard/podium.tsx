@@ -10,16 +10,12 @@ interface PodiumProps {
   isNewTeam: (teamName: string) => boolean;
 }
 
-// Ordre d'affichage des positions sur le podium (de gauche à droite)
 const podiumPositionOrder = [5, 3, 1, 2, 4];
 
 export function Podium({ data, findPreviousPosition, isNewTeam }: PodiumProps) {
   const topFiveTeams = data.scores.slice(0, 5);
-
-  // S'assurer que nous avons toujours 5 positions, même si nous avons moins de 5 équipes
   const displayTeams = [...topFiveTeams];
 
-  // Ajouter des équipes vides si nécessaire pour remplir le podium
   while (displayTeams.length < 5) {
     displayTeams.push({
       teamName: `Équipe ${displayTeams.length + 1}`,

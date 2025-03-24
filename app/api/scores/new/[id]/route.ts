@@ -67,7 +67,6 @@ export async function POST(
 
     const data = await request.json();
 
-    // Valider le corps de la requête
     const validatedData = newScoreSchema.parse({
       ...data,
       id: teamIdNumber,

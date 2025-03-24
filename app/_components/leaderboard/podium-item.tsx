@@ -14,7 +14,6 @@ interface PodiumItemProps {
   isNew: boolean;
 }
 
-// Hauteurs des barres verticales pour chaque position
 const podiumHeights = {
   1: 140,
   2: 110,
@@ -23,7 +22,6 @@ const podiumHeights = {
   5: 40,
 };
 
-// Couleurs des podiums
 const podiumColors = {
   1: "bg-green-600",
   2: "bg-green-500",
@@ -42,11 +40,9 @@ export function PodiumItem({
   const shortName =
     teamName.length > 15 ? `${teamName.substring(0, 15)}...` : teamName;
 
-  // Détermine si la position a changé
   const hasPositionChanged =
     previousPosition !== null && previousPosition !== position;
 
-  // Détermine la direction du changement (montée ou descente)
   const positionDirection =
     hasPositionChanged && previousPosition !== null
       ? previousPosition > position
@@ -65,7 +61,6 @@ export function PodiumItem({
           delay: position * 0.1,
         }}
       >
-        {/* Avatar et changement de position */}
         <div className="relative z-10 mb-2">
           <motion.div whileHover={{ scale: 1.05 }} className="relative">
             <Avatar
@@ -86,7 +81,6 @@ export function PodiumItem({
               </AvatarFallback>
             </Avatar>
 
-            {/* Position change indicator */}
             {hasPositionChanged && !isNew && (
               <motion.div
                 className="absolute -top-2 -right-2"
@@ -109,7 +103,6 @@ export function PodiumItem({
               </motion.div>
             )}
 
-            {/* New team indicator */}
             {isNew && (
               <motion.div
                 className="absolute -top-2 -right-2"
@@ -125,7 +118,6 @@ export function PodiumItem({
           </motion.div>
         </div>
 
-        {/* Position number */}
         <motion.div
           className={cn(
             "absolute top-14 z-20 flex items-center justify-center rounded-full font-bold",
@@ -145,7 +137,6 @@ export function PodiumItem({
           {position}
         </motion.div>
 
-        {/* Barre verticale */}
         <motion.div
           className={cn(
             podiumColors[position as 1 | 2 | 3 | 4 | 5],
@@ -163,7 +154,6 @@ export function PodiumItem({
           }}
         />
 
-        {/* Score */}
         <motion.div
           className="mt-2 text-center"
           initial={{ opacity: 0 }}
