@@ -9,9 +9,6 @@ export async function newScore(
     const response = await fetch(`/api/scores/new/${teamId}`, {
       method: "POST",
       body: JSON.stringify(values),
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     const data = await response.json();
