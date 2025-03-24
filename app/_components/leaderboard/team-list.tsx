@@ -53,9 +53,8 @@ export function TeamList({
             </tr>
           </thead>
           <tbody>
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="popLayout">
               {otherTeams.map((team, index) => {
-                // Calculate all team-related values in one place
                 const position = index + 6;
                 const teamName = team.teamName || `Équipe ${position}`;
                 const shortName =
@@ -79,18 +78,7 @@ export function TeamList({
 
                 const isNew = team.teamName ? isNewTeam(team.teamName) : false;
 
-                // Calculate the distance moved for animation intensity
-                const jumpDistance =
-                  positionChanged && previousPosition
-                    ? Math.abs(previousPosition - position)
-                    : 0;
-
-                // Generate fixed offsets to avoid re-renders
-                const xOffset = positionChanged
-                  ? (Math.random() > 0.5 ? 5 : -5) * jumpDistance
-                  : 0;
-
-                // Create a stable key for the row that doesn't change with position
+                // Create a stable key for layout animations
                 const rowKey = teamName || `position-${position}-${team.score}`;
 
                 return (
@@ -103,12 +91,9 @@ export function TeamList({
                     exit={{ opacity: 0, x: 20 }}
                     transition={{
                       type: "spring",
-                      stiffness: 500,
+                      stiffness: 300,
                       damping: 30,
-                      layoutY: {
-                        duration: 0.8,
-                        ease: "anticipate",
-                      },
+                      duration: 0.8,
                     }}
                     className={cn(
                       "border-b border-sky-100 hover:bg-sky-50/50",
@@ -116,42 +101,39 @@ export function TeamList({
                     )}
                   >
                     <td className="py-3 text-center">
-                      <div className="flex items-center justify-center">
+                      <motion.div
+                        layout
+                        className="flex items-center justify-center"
+                      >
                         <motion.div
+                          layout
                           className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-sky-200 text-sm font-semibold text-sky-800"
                           animate={
                             positionChanged
                               ? {
-                                  scale: [1, 1.2, 1],
-                                  transition: { duration: 0.5 },
+                                  scale: [1, 1.1, 1],
+                                  transition: { duration: 0.4 },
                                 }
                               : {}
                           }
                         >
                           {position}e
                         </motion.div>
-                      </div>
+                      </motion.div>
                     </td>
 
                     <td className="py-3">
-                      <div className="relative flex items-center justify-center">
+                      <motion.div
+                        layout
+                        className="relative flex items-center justify-center"
+                      >
                         <motion.div
+                          layout
                           animate={
                             positionChanged
                               ? {
-                                  y: [
-                                    positionDirection === "up"
-                                      ? jumpDistance * 3
-                                      : -jumpDistance * 3,
-                                    0,
-                                  ],
-                                  x: [xOffset, 0],
-                                  transition: {
-                                    type: "spring",
-                                    stiffness: 200,
-                                    damping: 20,
-                                    duration: 0.7,
-                                  },
+                                  scale: [1, 1.1, 1],
+                                  transition: { duration: 0.4 },
                                 }
                               : {}
                           }
@@ -223,21 +205,18 @@ export function TeamList({
                             </motion.div>
                           )}
                         </AnimatePresence>
-                      </div>
+                      </motion.div>
                     </td>
 
                     <td className="py-3">
                       <motion.span
+                        layout
                         className="font-medium text-sky-900"
                         animate={
                           positionChanged
                             ? {
-                                y: [positionDirection === "up" ? 5 : -5, 0],
-                                transition: {
-                                  type: "spring",
-                                  stiffness: 300,
-                                  damping: 20,
-                                },
+                                scale: [1, 1.05, 1],
+                                transition: { duration: 0.4 },
                               }
                             : {}
                         }
@@ -248,12 +227,13 @@ export function TeamList({
 
                     <td className="py-3 pr-4 text-right">
                       <motion.span
+                        layout
                         className="font-bold text-sky-700"
                         animate={
                           positionChanged
                             ? {
                                 scale: [1, 1.1, 1],
-                                transition: { duration: 0.5 },
+                                transition: { duration: 0.4 },
                               }
                             : {}
                         }

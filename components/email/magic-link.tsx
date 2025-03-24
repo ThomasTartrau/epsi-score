@@ -80,9 +80,7 @@ const baseStyles = {
 export const MagicLinkEmail = ({ url }: MagicLinkEmailProps) => (
   <Html>
     <Head />
-    <Preview>
-      Connectez-vous à votre compte {APP_NAME} avec ce lien
-    </Preview>
+    <Preview>Connectez-vous à votre compte {APP_NAME} avec ce lien</Preview>
     <Body style={baseStyles.main}>
       <Container style={baseStyles.container}>
         <Img
@@ -97,8 +95,8 @@ export const MagicLinkEmail = ({ url }: MagicLinkEmailProps) => (
 
         <Text style={baseStyles.paragraph}>Bonjour,</Text>
         <Text style={baseStyles.paragraph}>
-          Vous avez demandé un lien de connexion pour vous connecter à votre compte.
-          Cliquez sur le bouton ci-dessous pour vous connecter :
+          Vous avez demandé un lien de connexion pour vous connecter à votre
+          compte. Cliquez sur le bouton ci-dessous pour vous connecter :
         </Text>
 
         <Section style={baseStyles.btnContainer}>
