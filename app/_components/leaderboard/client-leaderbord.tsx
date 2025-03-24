@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import useSWR from "swr";
 import { Podium } from "./podium";
@@ -34,14 +34,36 @@ export default function ClientLeaderboard() {
   const [previousScores, setPreviousScores] =
     useState<ScoresResultInterface | null>(null);
 
+  // Use a ref to track data changes without causing re-renders
+  const dataRef = useRef<ScoresResultInterface | null>(null);
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    if (data && !isLoading) {
-      setPreviousScores((prevScores) => {
-        if (prevScores) {
-          return { scores: [...prevScores.scores] };
-        }
-        return { scores: [...data.scores] };
-      });
+    // Skip if data hasn't changed or is loading
+    if (!data || isLoading) return;
+
+    // On first load, just set previous scores without animation
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      setPreviousScores({ scores: [...data.scores] });
+      dataRef.current = data;
+      return;
+    }
+
+    // Compare current data with previous data
+    if (
+      dataRef.current &&
+      JSON.stringify(dataRef.current) !== JSON.stringify(data)
+    ) {
+      // Store the new data for the next comparison
+      dataRef.current = data;
+
+      // After animations complete, update the previous scores
+      const timer = setTimeout(() => {
+        setPreviousScores({ scores: [...data.scores] });
+      }, 3500);
+
+      return () => clearTimeout(timer);
     }
   }, [data, isLoading]);
 
@@ -79,7 +101,7 @@ export default function ClientLeaderboard() {
   }
 
   return (
-    <>
+    <div>
       <Podium
         data={data}
         findPreviousPosition={findPreviousPosition}
@@ -101,6 +123,6 @@ export default function ClientLeaderboard() {
       >
         Dernière mise à jour : {new Date().toLocaleTimeString()}
       </motion.div>
-    </>
+    </div>
   );
 }

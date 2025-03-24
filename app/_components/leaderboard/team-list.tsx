@@ -3,8 +3,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { ScoresResultInterface } from "@/app/_types/scores.type";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDownIcon, ArrowUpIcon, StarIcon } from "lucide-react";
+import { useMemo } from "react";
 
 interface TeamListProps {
   data: ScoresResultInterface;
@@ -17,7 +18,8 @@ export function TeamList({
   findPreviousPosition,
   isNewTeam,
 }: TeamListProps) {
-  const otherTeams = data.scores.slice(5);
+  // Use useMemo to avoid recalculating on every render
+  const otherTeams = useMemo(() => data.scores.slice(5), [data.scores]);
 
   if (otherTeams.length === 0) {
     return null;
@@ -51,114 +53,220 @@ export function TeamList({
             </tr>
           </thead>
           <tbody>
-            {otherTeams.map((team, index) => {
-              const position = index + 6;
-              const teamName = team.teamName || `Équipe ${position}`;
-              const shortName =
-                teamName.length > 25
-                  ? `${teamName.substring(0, 25)}...`
-                  : teamName;
+            <AnimatePresence mode="wait">
+              {otherTeams.map((team, index) => {
+                // Calculate all team-related values in one place
+                const position = index + 6;
+                const teamName = team.teamName || `Équipe ${position}`;
+                const shortName =
+                  teamName.length > 25
+                    ? `${teamName.substring(0, 25)}...`
+                    : teamName;
 
-              const previousPosition = team.teamName
-                ? findPreviousPosition(team.teamName)
-                : null;
-              const positionChanged =
-                previousPosition !== null && previousPosition !== position;
-              const positionDirection =
-                positionChanged && previousPosition !== null
-                  ? previousPosition > position
-                    ? "up"
-                    : "down"
+                const previousPosition = team.teamName
+                  ? findPreviousPosition(team.teamName)
                   : null;
 
-              const isNew = team.teamName ? isNewTeam(team.teamName) : false;
+                const positionChanged =
+                  previousPosition !== null && previousPosition !== position;
 
-              return (
-                <motion.tr
-                  key={`team-${position}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className={cn(
-                    "border-b border-green-100 hover:bg-green-50/50 dark:border-green-900/30 dark:hover:bg-green-900/10",
-                    index % 2 === 0
-                      ? "bg-white dark:bg-transparent"
-                      : "bg-green-50/30 dark:bg-green-900/5",
-                  )}
-                >
-                  <td className="py-3 text-center">
-                    <div className="flex items-center justify-center">
-                      <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-green-200 text-sm font-semibold text-green-800 dark:bg-green-700 dark:text-green-100">
-                        {position}
+                const positionDirection =
+                  positionChanged && previousPosition !== null
+                    ? previousPosition > position
+                      ? "up"
+                      : "down"
+                    : null;
+
+                const isNew = team.teamName ? isNewTeam(team.teamName) : false;
+
+                // Calculate the distance moved for animation intensity
+                const jumpDistance =
+                  positionChanged && previousPosition
+                    ? Math.abs(previousPosition - position)
+                    : 0;
+
+                // Generate fixed offsets to avoid re-renders
+                const xOffset = positionChanged
+                  ? (Math.random() > 0.5 ? 5 : -5) * jumpDistance
+                  : 0;
+
+                // Create a stable key for the row that doesn't change with position
+                const rowKey = teamName || `position-${position}-${team.score}`;
+
+                return (
+                  <motion.tr
+                    key={rowKey}
+                    layout
+                    layoutId={rowKey}
+                    initial={isNew ? { opacity: 0, x: -20 } : false}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                      layoutY: {
+                        duration: 0.8,
+                        ease: "anticipate",
+                      },
+                    }}
+                    className={cn(
+                      "border-b border-green-100 hover:bg-green-50/50 dark:border-green-900/30 dark:hover:bg-green-900/10",
+                      index % 2 === 0
+                        ? "bg-white dark:bg-transparent"
+                        : "bg-green-50/30 dark:bg-green-900/5",
+                    )}
+                  >
+                    <td className="py-3 text-center">
+                      <div className="flex items-center justify-center">
+                        <motion.div
+                          className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-green-200 text-sm font-semibold text-green-800 dark:bg-green-700 dark:text-green-100"
+                          animate={
+                            positionChanged
+                              ? {
+                                  scale: [1, 1.2, 1],
+                                  transition: { duration: 0.5 },
+                                }
+                              : {}
+                          }
+                        >
+                          {position}
+                        </motion.div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td className="py-3">
-                    <div className="relative flex items-center justify-center">
-                      <Avatar className="h-9 w-9 border-2 border-green-100 dark:border-green-700">
-                        <AvatarImage
-                          src={`/team/${teamName}.png`}
-                          alt={teamName}
-                        />
-                        <AvatarFallback className="bg-green-100 font-medium text-green-800">
-                          {shortName.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-
-                      {positionChanged && !isNew && (
+                    <td className="py-3">
+                      <div className="relative flex items-center justify-center">
                         <motion.div
-                          className="absolute -top-1 -right-1"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.3 }}
+                          animate={
+                            positionChanged
+                              ? {
+                                  y: [
+                                    positionDirection === "up"
+                                      ? jumpDistance * 3
+                                      : -jumpDistance * 3,
+                                    0,
+                                  ],
+                                  x: [xOffset, 0],
+                                  transition: {
+                                    type: "spring",
+                                    stiffness: 200,
+                                    damping: 20,
+                                    duration: 0.7,
+                                  },
+                                }
+                              : {}
+                          }
                         >
-                          <div
-                            className={cn(
-                              "flex h-4 w-4 items-center justify-center rounded-full text-white",
-                              positionDirection === "up"
-                                ? "bg-green-500"
-                                : "bg-rose-500",
-                            )}
-                          >
-                            {positionDirection === "up" ? (
-                              <ArrowUpIcon size={10} />
-                            ) : (
-                              <ArrowDownIcon size={10} />
-                            )}
-                          </div>
+                          <Avatar className="h-9 w-9 border-2 border-green-100 dark:border-green-700">
+                            <AvatarImage
+                              src={`/team/${teamName}.png`}
+                              alt={teamName}
+                              loading="eager"
+                            />
+                            <AvatarFallback className="bg-green-100 font-medium text-green-800">
+                              {shortName.substring(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
                         </motion.div>
-                      )}
 
-                      {isNew && (
-                        <motion.div
-                          className="absolute -top-1 -right-1"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.3 }}
-                        >
-                          <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white">
-                            <StarIcon size={10} />
-                          </div>
-                        </motion.div>
-                      )}
-                    </div>
-                  </td>
+                        <AnimatePresence mode="wait">
+                          {positionChanged && !isNew && (
+                            <motion.div
+                              key={`direction-${teamName}-${position}`}
+                              className="absolute -top-1 -right-1"
+                              initial={{
+                                scale: 0,
+                                rotate: positionDirection === "up" ? -45 : 45,
+                              }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              exit={{ scale: 0, opacity: 0 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 15,
+                              }}
+                            >
+                              <div
+                                className={cn(
+                                  "flex h-4 w-4 items-center justify-center rounded-full text-white",
+                                  positionDirection === "up"
+                                    ? "bg-green-500"
+                                    : "bg-rose-500",
+                                )}
+                              >
+                                {positionDirection === "up" ? (
+                                  <ArrowUpIcon size={10} />
+                                ) : (
+                                  <ArrowDownIcon size={10} />
+                                )}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
 
-                  <td className="py-3">
-                    <span className="font-medium text-green-900 dark:text-green-100">
-                      {shortName}
-                    </span>
-                  </td>
+                        <AnimatePresence mode="wait">
+                          {isNew && (
+                            <motion.div
+                              key={`new-${teamName}`}
+                              className="absolute -top-1 -right-1"
+                              initial={{ scale: 0, rotate: 45 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              exit={{ scale: 0, opacity: 0 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 15,
+                              }}
+                            >
+                              <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white">
+                                <StarIcon size={10} />
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </td>
 
-                  <td className="py-3 pr-4 text-right">
-                    <span className="font-bold text-green-700 dark:text-green-300">
-                      {team.score.toLocaleString()}
-                    </span>
-                  </td>
-                </motion.tr>
-              );
-            })}
+                    <td className="py-3">
+                      <motion.span
+                        className="font-medium text-green-900 dark:text-green-100"
+                        animate={
+                          positionChanged
+                            ? {
+                                y: [positionDirection === "up" ? 5 : -5, 0],
+                                transition: {
+                                  type: "spring",
+                                  stiffness: 300,
+                                  damping: 20,
+                                },
+                              }
+                            : {}
+                        }
+                      >
+                        {shortName}
+                      </motion.span>
+                    </td>
+
+                    <td className="py-3 pr-4 text-right">
+                      <motion.span
+                        className="font-bold text-green-700 dark:text-green-300"
+                        animate={
+                          positionChanged
+                            ? {
+                                scale: [1, 1.1, 1],
+                                transition: { duration: 0.5 },
+                              }
+                            : {}
+                        }
+                      >
+                        {team.score.toLocaleString()}
+                      </motion.span>
+                    </td>
+                  </motion.tr>
+                );
+              })}
+            </AnimatePresence>
           </tbody>
         </table>
       </div>

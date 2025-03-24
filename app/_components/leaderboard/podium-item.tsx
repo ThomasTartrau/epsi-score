@@ -4,8 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScoreResultInterface } from "@/app/_types/scores.type";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDownIcon, ArrowUpIcon, StarIcon } from "lucide-react";
+import { useMemo } from "react";
 
 interface PodiumItemProps {
   team: ScoreResultInterface;
@@ -36,32 +37,79 @@ export function PodiumItem({
   previousPosition,
   isNew,
 }: PodiumItemProps) {
-  const teamName = team.teamName || `Équipe ${position}`;
-  const shortName =
-    teamName.length > 15 ? `${teamName.substring(0, 15)}...` : teamName;
+  const {
+    teamName,
+    shortName,
+    hasPositionChanged,
+    positionDirection,
+    jumpDistance,
+  } = useMemo(() => {
+    const teamName = team.teamName || `Équipe ${position}`;
+    const shortName =
+      teamName.length > 15 ? `${teamName.substring(0, 15)}...` : teamName;
 
-  const hasPositionChanged =
-    previousPosition !== null && previousPosition !== position;
+    const hasPositionChanged =
+      previousPosition !== null && previousPosition !== position;
 
-  const positionDirection =
-    hasPositionChanged && previousPosition !== null
-      ? previousPosition > position
-        ? "up"
-        : "down"
-      : null;
+    const positionDirection =
+      hasPositionChanged && previousPosition !== null
+        ? previousPosition > position
+          ? "up"
+          : "down"
+        : null;
+
+    const jumpDistance =
+      hasPositionChanged && previousPosition
+        ? Math.abs(previousPosition - position) * 3
+        : 0;
+
+    return {
+      teamName,
+      shortName,
+      hasPositionChanged,
+      positionDirection,
+      jumpDistance,
+    };
+  }, [team.teamName, previousPosition, position]);
+
+  const xRandomOffset = useMemo(() => (Math.random() > 0.5 ? 5 : -5), []);
 
   return (
     <div className="relative flex flex-col items-center">
       <motion.div
         className="relative flex flex-col items-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        layout
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{
-          duration: 0.5,
-          delay: position * 0.1,
+          opacity: { duration: 0.3 },
+          layout: {
+            type: "spring",
+            bounce: 0.2,
+            duration: 0.8,
+          },
         }}
       >
-        <div className="relative z-10 mb-2">
+        <motion.div
+          className="relative z-10 mb-2"
+          animate={
+            hasPositionChanged
+              ? {
+                  y: [
+                    positionDirection === "up" ? jumpDistance : -jumpDistance,
+                    0,
+                  ],
+                  x: [xRandomOffset, 0],
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                    duration: 0.6,
+                  },
+                }
+              : {}
+          }
+        >
           <motion.div whileHover={{ scale: 1.05 }} className="relative">
             <Avatar
               className={cn(
@@ -75,48 +123,71 @@ export function PodiumItem({
                       : "border-green-200",
               )}
             >
-              <AvatarImage src={`/team/${teamName}.png`} alt={teamName} />
+              <AvatarImage
+                src={`/team/${teamName}.png`}
+                alt={shortName}
+                loading="eager"
+              />
               <AvatarFallback className="bg-green-100 text-lg font-bold text-green-800">
                 {shortName.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
 
-            {hasPositionChanged && !isNew && (
-              <motion.div
-                className="absolute -top-2 -right-2"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Badge
-                  className={cn(
-                    "flex h-6 w-6 items-center justify-center rounded-full p-0 font-bold text-white",
-                    positionDirection === "up" ? "bg-green-500" : "bg-rose-500",
-                  )}
+            <AnimatePresence mode="wait">
+              {hasPositionChanged && !isNew && (
+                <motion.div
+                  key={`direction-${position}-${teamName}`}
+                  className="absolute -top-2 -right-2"
+                  initial={{
+                    scale: 0,
+                    rotate: positionDirection === "up" ? -45 : 45,
+                  }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 15,
+                  }}
                 >
-                  {positionDirection === "up" ? (
-                    <ArrowUpIcon size={12} />
-                  ) : (
-                    <ArrowDownIcon size={12} />
-                  )}
-                </Badge>
-              </motion.div>
-            )}
+                  <Badge
+                    className={cn(
+                      "flex h-6 w-6 items-center justify-center rounded-full p-0 font-bold text-white",
+                      positionDirection === "up"
+                        ? "bg-green-500"
+                        : "bg-rose-500",
+                    )}
+                  >
+                    {positionDirection === "up" ? (
+                      <ArrowUpIcon size={12} />
+                    ) : (
+                      <ArrowDownIcon size={12} />
+                    )}
+                  </Badge>
+                </motion.div>
+              )}
 
-            {isNew && (
-              <motion.div
-                className="absolute -top-2 -right-2"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Badge className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 p-0 text-white">
-                  <StarIcon size={12} />
-                </Badge>
-              </motion.div>
-            )}
+              {isNew && (
+                <motion.div
+                  key={`new-${teamName}`}
+                  className="absolute -top-2 -right-2"
+                  initial={{ scale: 0, rotate: 45 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 15,
+                  }}
+                >
+                  <Badge className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 p-0 text-white">
+                    <StarIcon size={12} />
+                  </Badge>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
-        </div>
+        </motion.div>
 
         <motion.div
           className={cn(
@@ -132,7 +203,12 @@ export function PodiumItem({
           )}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ delay: 0.2 }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 20,
+            delay: 0.1,
+          }}
         >
           {position}
         </motion.div>
@@ -143,14 +219,17 @@ export function PodiumItem({
             "w-12 rounded-t-md shadow-md",
           )}
           style={{
-            height: podiumHeights[position as 1 | 2 | 3 | 4 | 5],
             marginTop: "1rem",
           }}
           initial={{ height: 0 }}
-          animate={{ height: podiumHeights[position as 1 | 2 | 3 | 4 | 5] }}
+          animate={{
+            height: podiumHeights[position as 1 | 2 | 3 | 4 | 5],
+          }}
           transition={{
-            duration: 0.5,
-            delay: position * 0.1,
+            type: "spring",
+            stiffness: 250,
+            damping: 20,
+            duration: 0.7,
           }}
         />
 
@@ -158,11 +237,21 @@ export function PodiumItem({
           className="mt-2 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.2 }}
         >
-          <p className="text-lg font-bold text-green-700 dark:text-green-300">
+          <motion.p
+            className="text-lg font-bold text-green-700 dark:text-green-300"
+            animate={
+              hasPositionChanged
+                ? {
+                    scale: [1, 1.1, 1],
+                    transition: { duration: 0.4 },
+                  }
+                : {}
+            }
+          >
             {team.score.toLocaleString()}
-          </p>
+          </motion.p>
           <p className="line-clamp-1 max-w-[90px] text-center text-xs font-medium text-green-600 dark:text-green-400">
             {shortName}
           </p>

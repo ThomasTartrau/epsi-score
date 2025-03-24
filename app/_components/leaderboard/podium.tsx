@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { PodiumItem } from "./podium-item";
 import { ScoresResultInterface } from "@/app/_types/scores.type";
+import { useMemo } from "react";
 
 interface PodiumProps {
   data: ScoresResultInterface;
@@ -13,15 +14,20 @@ interface PodiumProps {
 const podiumPositionOrder = [5, 3, 1, 2, 4];
 
 export function Podium({ data, findPreviousPosition, isNewTeam }: PodiumProps) {
-  const topFiveTeams = data.scores.slice(0, 5);
-  const displayTeams = [...topFiveTeams];
+  // Use useMemo to avoid recalculating on every render
+  const displayTeams = useMemo(() => {
+    const topFiveTeams = data.scores.slice(0, 5);
+    const teams = [...topFiveTeams];
 
-  while (displayTeams.length < 5) {
-    displayTeams.push({
-      teamName: `Équipe ${displayTeams.length + 1}`,
-      score: 0,
-    });
-  }
+    while (teams.length < 5) {
+      teams.push({
+        teamName: `Équipe ${teams.length + 1}`,
+        score: 0,
+      });
+    }
+
+    return teams;
+  }, [data.scores]);
 
   return (
     <motion.div
@@ -31,32 +37,46 @@ export function Podium({ data, findPreviousPosition, isNewTeam }: PodiumProps) {
       transition={{ duration: 0.5 }}
     >
       <div className="mt-4 flex items-end justify-between gap-4 px-4 md:px-8">
-        {podiumPositionOrder.map((position) => {
-          const actualPosition = position;
-          const team = displayTeams[actualPosition - 1];
+        <AnimatePresence mode="wait">
+          {podiumPositionOrder.map((position) => {
+            const actualPosition = position;
+            const team = displayTeams[actualPosition - 1];
 
-          if (!team) return null;
+            if (!team) return null;
 
-          const previousPosition = team.teamName
-            ? findPreviousPosition(team.teamName)
-            : null;
+            // Create these values here to avoid recalculation in PodiumItem
+            const previousPosition = team.teamName
+              ? findPreviousPosition(team.teamName)
+              : null;
 
-          const isNew = team.teamName ? isNewTeam(team.teamName) : false;
+            const isNew = team.teamName ? isNewTeam(team.teamName) : false;
 
-          return (
-            <div
-              key={`podium-${position}`}
-              className="flex flex-1 justify-center"
-            >
-              <PodiumItem
-                team={team}
-                position={actualPosition}
-                previousPosition={previousPosition}
-                isNew={isNew}
-              />
-            </div>
-          );
-        })}
+            // Create a stable key for layout animations
+            const itemKey = team.teamName || `podium-${position}-${team.score}`;
+
+            return (
+              <motion.div
+                key={itemKey}
+                layout
+                layoutId={itemKey}
+                className="flex flex-1 justify-center"
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30,
+                  duration: 0.8,
+                }}
+              >
+                <PodiumItem
+                  team={team}
+                  position={actualPosition}
+                  previousPosition={previousPosition}
+                  isNew={isNew}
+                />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
