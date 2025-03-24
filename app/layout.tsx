@@ -7,6 +7,7 @@ import { ErrorHandler } from "@/components/custom/error-handler";
 import { Spinner } from "@/components/custom/spinner";
 import { Suspense } from "react";
 import { ToasterProvider } from "@/app/_components/toaster-provider";
+import SWRProvider from "@/app/_components/SWRProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: APP_NAME,
+  title: APP_NAME + " - Affichage du classement",
   description: APP_DESCRIPTION,
 };
 
@@ -39,11 +40,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Suspense fallback={<Spinner />}>
-            <ErrorHandler />
-          </Suspense>
-          {children}
-          <ToasterProvider />
+          <SWRProvider>
+            <Suspense fallback={<Spinner />}>
+              <ErrorHandler />
+            </Suspense>
+            {children}
+            <ToasterProvider />
+          </SWRProvider>
         </ThemeProvider>
       </body>
     </html>
