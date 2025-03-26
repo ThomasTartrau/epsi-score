@@ -193,13 +193,6 @@ export default function AdminPage() {
                   Gérer les équipes
                 </Button>
               </Link>
-
-              <Link href="/admin/scores" className="w-full">
-                <Button variant="outline" className="w-full justify-start">
-                  <StarIcon className="mr-2 h-4 w-4" />
-                  Gérer les scores
-                </Button>
-              </Link>
             </div>
           </CardContent>
         </Card>
@@ -219,10 +212,6 @@ export default function AdminPage() {
             <p>
               • <strong>Équipes</strong> - La suppression d&apos;une équipe
               supprimera tous les scores associés.
-            </p>
-            <p>
-              • <strong>Scores</strong> - Vous pouvez filtrer les scores par
-              utilisateur ou par équipe.
             </p>
           </CardContent>
         </Card>
