@@ -1,12 +1,13 @@
 import prisma from "@/lib/prisma";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { magicLink } from "better-auth/plugins";
+import { admin, magicLink } from "better-auth/plugins";
 import { APP_NAME } from "@/lib/constants";
 import { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { render } from "@react-email/render";
 import MagicLinkEmail from "@/components/email/magic-link";
 import { Resend } from "resend";
+
 export const authConfig = {
   appName: APP_NAME,
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
@@ -41,6 +42,7 @@ export const authConfig = {
         });
       },
     }),
+    admin(),
   ],
 } satisfies BetterAuthOptions;
 

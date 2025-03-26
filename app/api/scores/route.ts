@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ScoresResultInterface } from "@/app/_types/scores.type";
 import prisma from "@/lib/prisma";
+import { Score } from "@prisma/client";
 
 export async function GET() {
   const teams = await prisma.team.findMany({
@@ -12,7 +13,7 @@ export async function GET() {
   const results: ScoresResultInterface = {
     scores: teams
       .map((team) => {
-        const totalScore = team.scores.reduce((acc, score) => {
+        const totalScore = team.scores.reduce((acc, score: Score) => {
           return (
             acc +
             score.score_1 +
