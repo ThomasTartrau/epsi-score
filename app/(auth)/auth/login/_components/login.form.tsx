@@ -77,6 +77,11 @@ export function LoginForm() {
           </LoadingButton>
         </form>
       </Form>
+      <div className="text-muted-foreground hover:[&_a]:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4">
+        En cliquant sur continuer, vous acceptez nos{" "}
+        <a href="/terms">Conditions d&apos;utilisation</a> et{" "}
+        <a href="/privacy">Politique de confidentialité</a>.
+      </div>
     </>
   );
 }
