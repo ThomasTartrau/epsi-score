@@ -18,7 +18,7 @@ import { newScoreSchema } from "../_types/score.types";
 import { StarRating } from "@/components/custom/star-rating";
 import { newScore } from "../_actions/new-score.actions";
 import { toast } from "sonner";
-
+import { useRouter } from "next/navigation";
 interface Score {
   name: string;
   title: string;
@@ -27,7 +27,7 @@ interface Score {
 
 export function NewScoreForm({ teamId }: { teamId: string }) {
   const [isPending, startTransition] = useTransition();
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof newScoreSchema>>({
     resolver: zodResolver(newScoreSchema),
     defaultValues: {
@@ -46,6 +46,7 @@ export function NewScoreForm({ teamId }: { teamId: string }) {
       if (response.error) {
         toast.error(response.error);
       } else {
+        router.push(`/dashboard/scores/confirmation`);
         toast.success(response.success);
       }
     });
