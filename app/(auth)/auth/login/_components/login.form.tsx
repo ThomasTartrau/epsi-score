@@ -14,6 +14,7 @@ import { signInSchema } from "../../../../_types/auth.types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 import { useTransition } from "react";
 import { useSearchParams } from "next/navigation";
@@ -24,6 +25,8 @@ import { useRouter } from "next/navigation";
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
+
+  const TURNSTILE_SITE_KEY = "0x4AAAAAABC1sq0iRNcIal-9";
 
   const [isPending, startTransition] = useTransition();
 
@@ -72,6 +75,7 @@ export function LoginForm() {
               </FormItem>
             )}
           />
+          <Turnstile siteKey={TURNSTILE_SITE_KEY} />
           <LoadingButton loading={isPending} className="w-full">
             Envoyer un lien de connexion
           </LoadingButton>

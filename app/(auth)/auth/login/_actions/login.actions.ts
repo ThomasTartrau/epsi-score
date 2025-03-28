@@ -14,6 +14,11 @@ export const signInWithMagicLink = async (
     {
       email: values.email,
       callbackURL: callbackUrl ?? AUTHENTICATED_URL,
+      fetchOptions: {
+        headers: {
+          "x-captcha-response": process.env.TURNSTILE_SITE_KEY || "",
+        },
+      },
     },
     {
       onRequest: () => {

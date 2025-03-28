@@ -1,12 +1,14 @@
 import prisma from "@/lib/prisma";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { admin, magicLink } from "better-auth/plugins";
+import { admin, captcha, magicLink } from "better-auth/plugins";
 import { APP_NAME } from "@/lib/constants";
 import { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { render } from "@react-email/render";
 import MagicLinkEmail from "@/components/email/magic-link";
 import { Resend } from "resend";
+
+const CAPTCHA_ENDPOINTS = ["/auth/login"];
 
 export const authConfig = {
   appName: APP_NAME,
@@ -43,6 +45,11 @@ export const authConfig = {
       },
     }),
     admin(),
+    captcha({
+      provider: "cloudflare-turnstile",
+      secretKey: process.env.TURNSTILE_SECRET_KEY || "",
+      endpoints: CAPTCHA_ENDPOINTS,
+    }),
   ],
 } satisfies BetterAuthOptions;
 
