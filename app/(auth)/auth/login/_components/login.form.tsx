@@ -76,7 +76,10 @@ export function LoginForm({ nodeEnv }: { nodeEnv: string }) {
             )}
           />
           {nodeEnv === "production" && (
-            <Turnstile siteKey={TURNSTILE_SITE_KEY} />
+            <Turnstile
+              siteKey={TURNSTILE_SITE_KEY}
+              options={{ theme: "light", size: "flexible" }}
+            />
           )}
           <LoadingButton loading={isPending} className="w-full">
             Envoyer un lien de connexion
