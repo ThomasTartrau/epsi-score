@@ -22,7 +22,7 @@ import { useSearchParams } from "next/navigation";
 import { signInWithMagicLink } from "../_actions/login.actions";
 import { useRouter } from "next/navigation";
 
-export function LoginForm() {
+export function LoginForm({ nodeEnv }: { nodeEnv: string }) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
@@ -75,7 +75,9 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Turnstile siteKey={TURNSTILE_SITE_KEY} />
+          {nodeEnv === "production" && (
+            <Turnstile siteKey={TURNSTILE_SITE_KEY} />
+          )}
           <LoadingButton loading={isPending} className="w-full">
             Envoyer un lien de connexion
           </LoadingButton>

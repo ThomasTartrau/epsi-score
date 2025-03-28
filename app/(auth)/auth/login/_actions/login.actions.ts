@@ -10,13 +10,15 @@ export const signInWithMagicLink = async (
   callbackUrl: string | null,
   router: RouterType,
 ) => {
+  const TURNSTILE_SITE_KEY = "0x4AAAAAABC1sq0iRNcIal-9";
+
   await signIn.magicLink(
     {
       email: values.email,
       callbackURL: callbackUrl ?? AUTHENTICATED_URL,
       fetchOptions: {
         headers: {
-          "x-captcha-response": process.env.TURNSTILE_SITE_KEY || "",
+          "x-captcha-response": TURNSTILE_SITE_KEY,
         },
       },
     },

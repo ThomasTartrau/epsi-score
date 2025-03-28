@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Spinner } from "@/components/custom/spinner";
 import Logo from "@/components/custom/logo";
 import { LoginForm } from "./_components/login.form";
+import { ENVIRONMENT } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Connexion",
@@ -19,7 +20,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold">Bon retour parmi nous !</h1>
       </div>
       <Suspense fallback={<Spinner />}>
-        <LoginForm />
+        <LoginForm nodeEnv={ENVIRONMENT} />
       </Suspense>
     </main>
   );

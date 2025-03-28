@@ -45,11 +45,15 @@ export const authConfig = {
       },
     }),
     admin(),
-    captcha({
-      provider: "cloudflare-turnstile",
-      secretKey: process.env.TURNSTILE_SECRET_KEY || "",
-      endpoints: CAPTCHA_ENDPOINTS,
-    }),
+    ...(process.env.NODE_ENV === "production"
+      ? [
+          captcha({
+            provider: "cloudflare-turnstile",
+            secretKey: process.env.TURNSTILE_SECRET_KEY || "",
+            endpoints: CAPTCHA_ENDPOINTS,
+          }),
+        ]
+      : []),
   ],
 } satisfies BetterAuthOptions;
 
