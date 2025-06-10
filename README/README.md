@@ -5,5 +5,5 @@
 3. Postgresql
 4. Nom de domaine pour l'envoie d'email
 5. Un compte resend pour envoyer les emails via leurs api
-6. Un compte cloudflare pour utiliser leur services "(turnstile)[https://developers.cloudflare.com/turnstile/get-started/]" pour l'anti-bot
-7. (Créer un token secret)[https://www.better-auth.com/docs/installation]
+6. Un compte cloudflare pour utiliser leur services "[https://developers.cloudflare.com/turnstile/get-started/](turnstile)" pour l'anti-bot
+7. [https://www.better-auth.com/docs/installation](Créer un token secret)
